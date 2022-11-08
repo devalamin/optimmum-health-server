@@ -41,6 +41,12 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const result = await servicesCollection.findOne(query);
             res.send(result)
+        });
+
+        app.post('/services', async (req, res) => {
+            const newService = req.body;
+            const result = await servicesCollection.insertOne(newService);
+            res.send(result)
         })
 
         app.post('/reviews', async (req, res) => {
