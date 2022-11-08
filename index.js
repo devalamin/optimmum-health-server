@@ -21,13 +21,26 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const servicesCollection = client.db('optimumdb').collection('services')
-
+        const reviewCollection = client.db('optimumdb').collection('reviews');
 
         app.get('/services', async (req, res) => {
             const query = {}
             const cursor = servicesCollection.find(query)
             const services = await cursor.toArray();
             res.send(services)
+        })
+
+        app.get('/reviews', async (req, res) => {
+            let query = {};
+            if (req.query.service_name) {
+                query = {
+                    service_name: req.query.service_name
+                }
+            }
+
+            const cursor = reviewCollection.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews)
         })
 
         app.get('/services/:id', async (req, res) => {
